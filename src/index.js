@@ -1,69 +1,79 @@
-// module.exports = function zeros(expression) {
-//   // your solution
-// }
-
-
-function zeros(expression) {
+module.exports = function zeros(expression) {
   // your solution
-  
+  const array = expression.split('*');
 
+  // function ! pair 2 and 5
+  function countFact(number) {
+    let multip2 = 0;
+    let multip5 = 0;
 
-}
+    let i = 1;
+    while (2 ** i <= number) {
+      multip2 += Math.floor(number / 2**i);
+      i++;
+    }
 
-function countZeroFact (number) {
-  
-  let sumZeros = 0;
-
-  if(number > 4) sumZeros += Math.floor(number/5);
-  if(number > 24) sumZeros += Math.floor(number/25);
-  if(number > 124) sumZeros += Math.floor(number/125);
-
-  return sumZeros;  
-} 
-
-
-
-let step = 0;
-function countZeroDoubFact (number) {
-  console.log("Вызов начало SETP- " + ++step + ", number - " + number);
-  
-  let sumZeros = 0;
-
-  if(number != 0) {
-    // sumZeros = countZeroFact(number) - countZeroDoubFact(number - 1); 
-    sumZeros = countZeroFact(number) - countZeroDoubFact(number - 1); 
-
-
-
-    console.log("выход STEP- " + step-- + ", sumZeros - " + sumZeros);
+    i = 1;
+    while (5 ** i <= number) {
+      multip5 += Math.floor(number / 5**i);
+      i++;
+    }
+    return { pears2: multip2, pears5: multip5, }
   }
-  return sumZeros;  
-} 
-
-// let testStr = '100';
-// console.log("рузультат ! = " + countZeroFact (testStr));
 
 
- let testStr2 = '22';
-console.log("рузультат !! = " + countZeroDoubFact (testStr2));
- 
+  // function !! pair 2 and 5
+  function countDoubleFact(number) {
+    let multip2 = 0;
+    let multip5 = 0;
+
+    if (number % 2 == 0) {
+
+      let i = 1;
+      while (2 ** i <= number) {
+        multip2 += Math.floor(number / 2**i);
+        i++;
+      }
+
+      i = 1;
+      while (5**i*2 <= number) {
+        multip5 += Math.floor(number / (5**i*2));
+        i++;
+      }
+    }
+
+    if (number % 2 != 0) {
+
+      let i = 1;
+      while (5 ** i <= number) {
+        multip5 += Math.round(number / (5**i*2));
+        i++;
+      }
+
+    }
 
 
+    return { pears2: multip2, pears5: multip5, }
+  }
 
 
+  // sum 2 and 5 count for each
+  let sum2 = 0;
+  let sum5 = 0;
+  
+  array.forEach(element => {
+    let pearObj = '';
+    if (element.endsWith('!!')){
+      pearObj = countDoubleFact(element.slice(0, -2));
+    }
+    else if (element.endsWith('!')){
+      pearObj = countFact(element.slice(0, -1));
+    }
+    
+    sum2 += pearObj.pears2;
+    sum5 += pearObj.pears5;
+  });
 
-
-
-
-
-
-
-
-
-
-
-
-
-// testStr = '';
-// console.log("рузультат = " + zeros (testStr));
- 
+  // return min multiplicity 5 or 2 
+  return sum5 < sum2 ? sum5 : sum2;
+}
